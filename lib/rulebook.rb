@@ -1,0 +1,2 @@
+class Rulebook
+end
