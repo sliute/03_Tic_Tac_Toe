@@ -1,9 +1,17 @@
+require_relative 'rulebook'
+
 class Board
   EMPTY_FIELD = ""
-  attr_reader :grid
+  attr_reader :grid, :rulebook
 
-  def initialize
-    @grid = Array.new(9) { EMPTY_FIELD }
+  def initialize(args)
+    check_rulebook(args)
+    @grid = @rulebook.tic_tac_toe_grid
+  end
+
+  def check_rulebook(args)
+    raise 'An actual rulebook is needed to start a game' unless args.fetch(:rulebook).is_a?(Rulebook)
+    @rulebook = args.fetch(:rulebook)
   end
 
   def set_field(args)

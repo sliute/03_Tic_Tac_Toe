@@ -1,20 +1,17 @@
+require_relative 'rulebook'
+
 class Player
-  attr_reader :name, :sign, :type
+  attr_reader :name, :sign, :type, :rulebook
 
   def initialize(args)
-    check_name(args)
-    check_type(args)
-    raise 'You must provide a single-character sign' if args.fetch(:sign) == "" || args.fetch(:sign).nil?
-    raise 'Your sign should be just 1 character long' if args.fetch(:sign).length > 1
-    @sign = args.fetch(:sign)
-  end
-
-  def check_name(args)
     args.fetch(:name) == "" || args.fetch(:name).nil? ? @name = "Anon" : @name = args.fetch(:name)
+    check_rulebook(args)
+    @type = @rulebook.check_player_type(args)
+    @sign = @rulebook.check_player_sign(args)
   end
 
-  def check_type(args)
-    raise 'You can only play as either human (h/H) or computer (c/C)' unless args.fetch(:type) =~ /[cChH]/
-    @type = args.fetch(:type)
+  def check_rulebook(args)
+    raise 'An actual rulebook is needed to start a game' unless args.fetch(:rulebook).is_a?(Rulebook)
+    @rulebook = args.fetch(:rulebook)
   end
 end
